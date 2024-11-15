@@ -23,7 +23,7 @@ define( 'MAILCHIMP_MAILMUNCH_SLUG', "mailchimp-mailmunch" );
 define( 'MAILCHIMP_MAILMUNCH_PREFIX', 'mc_mm' );
 define( 'MAILCHIMP_MAILMUNCH_POST_TYPE', 'mailmunch_page' );
 define( 'MAILCHIMP_MAILMUNCH_PLUGIN_DIRECTORY', 'mailchimp-forms-by-mailmunch' );
-define( 'MAILCHIMP_MAILMUNCH_VERSION', '3.2.3' );
+define( 'MAILCHIMP_MAILMUNCH_VERSION', '3.2.4' );
 
 /**
  * The core plugin class.

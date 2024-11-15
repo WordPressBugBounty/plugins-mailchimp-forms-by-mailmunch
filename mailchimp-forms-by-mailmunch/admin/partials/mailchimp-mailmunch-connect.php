@@ -1,4 +1,4 @@
-<form action="<?php echo add_query_arg( array('step' => 'integrate') ); ?>" method="POST" id="mailchimp-access-token-form">
+<form action="<?php echo esc_url(add_query_arg( array('step' => 'integrate') )); ?>" method="POST" id="mailchimp-access-token-form">
 <?php wp_nonce_field('mailchimp_mailmunch_form_action', 'mailchimp_mailmunch_form_nonce'); ?>
   <input type="hidden" name="access_token" value="" />
 </form>
@@ -17,7 +17,7 @@
         <thead>
           <tr>
             <th class="active">
-              <a href="<?php echo add_query_arg( array('step' => 'connect') ); ?>">Connect to MailChimp</a>
+              <a href="<?php echo esc_url(add_query_arg( array('step' => 'connect') )); ?>">Connect to MailChimp</a>
             </th>
             <th>Choose MailChimp List</th>
             <th>Create Opt-In Form</th>
@@ -34,7 +34,7 @@
               </a>
 
               <div class="skip-link-container">
-                <a id="skip-onboarding" href="<?php echo add_query_arg( array('step' => 'skip_onboarding') ); ?>">skip this and create a form</a>
+                <a id="skip-onboarding" href="<?php echo esc_url(add_query_arg( array('step' => 'skip_onboarding') )); ?>">skip this and create a form</a>
               </div>
             </td>
           </tr>

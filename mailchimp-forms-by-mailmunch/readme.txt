@@ -4,7 +4,7 @@ Donate link: https://www.mailmunch.com/pricing/?utm_source=wp-plugin-repo&utm_me
 Tags: MailChimp, MailChimp forms, MailChimp lists, opt-in forms, sign up form, MailChimp, email, forms, mailing lists, marketing, newsletter, sign up
 Requires at least: 4.0
 Tested up to: 6.4.2
-Stable tag: 3.2.3
+Stable tag: 3.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,6 +170,12 @@ Use the [WordPress.org plugin forums](https://wordpress.org/support/plugin/mailc
 8. Another MailChimp connected example
 
 == Changelog ==
+
+= 3.2.3 - Mar 8, 2024 = 
+
+** fixed known issues
+* sanitize inputs value
+* implement nonce verification 
 
 = 3.1.2 - Dec 7, 2018 =
 

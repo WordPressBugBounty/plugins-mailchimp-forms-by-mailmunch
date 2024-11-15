@@ -12,13 +12,13 @@
         <thead>
           <tr>
             <th>
-              <a href="<?php echo add_query_arg( array('step' => 'connect') ); ?>">
+              <a href="<?php echo esc_url(add_query_arg( array('step' => 'connect') )); ?>">
                 <img src="<?php echo plugins_url( 'img/smallcheck.png', dirname(__FILE__) ) ?>" />
                 Connect to MailChimp
               </a>
             </th>
             <th class="active">
-              <a href="<?php echo add_query_arg( array('step' => 'integrate') ); ?>">Choose MailChimp List</a>
+              <a href="<?php echo esc_url(add_query_arg( array('step' => 'integrate') )); ?>">Choose MailChimp List</a>
             </th>
             <th>Create Opt-In Form</th>
           </tr>
@@ -29,7 +29,7 @@
               <div class="inside-container">
                 <?php if (count($lists) > 0) { ?>
                 <p>Choose a list to save your subscribers in:</p>
-                <form action="<?php echo add_query_arg( array('step' => 'final') ); ?>" method="POST">
+                <form action="<?php echo esc_url(add_query_arg( array('step' => 'final') )); ?>" method="POST">
                   <select name="list_id">
                 <?php foreach ($lists as $list) { ?>
                     <option value="<?php echo $list['id']; ?>"><?php echo $list['name']; ?> (<?php echo $list['stats']['member_count'] ?> members)</option>
@@ -43,7 +43,7 @@
                 <?php } ?>
 
                 <div class="skip-link-container">
-                  <a id="skip-onboarding" href="<?php echo add_query_arg( array('step' => 'skip_onboarding') ); ?>">skip this and create a form</a>
+                  <a id="skip-onboarding" href="<?php echo esc_url(add_query_arg( array('step' => 'skip_onboarding') )); ?>">skip this and create a form</a>
                 </div>
               </div>
             </td>
