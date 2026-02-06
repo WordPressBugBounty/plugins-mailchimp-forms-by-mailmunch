@@ -3,8 +3,8 @@ Contributors: mailmunch, lizgannes, mailchimpzain, adeelraza, jessicabrownmm
 Donate link: https://www.mailmunch.com/pricing/?utm_source=wp-plugin-repo&utm_medium=mailchimp-mailmunch&utm_campaign=donate-link
 Tags: MailChimp, MailChimp forms, MailChimp lists, opt-in forms, sign up form, MailChimp, email, forms, mailing lists, marketing, newsletter, sign up
 Requires at least: 4.0
-Tested up to: 6.6.2
-Stable tag: 3.2.6
+Tested up to: 6.9
+Stable tag: 3.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
