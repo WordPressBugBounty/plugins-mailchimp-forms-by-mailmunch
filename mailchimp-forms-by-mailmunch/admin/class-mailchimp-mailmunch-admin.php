@@ -119,54 +119,83 @@ class Mailchimp_Mailmunch_Admin {
 			'delete_widget' => wp_create_nonce('mailmunch_delete_widget'),
 			'change_email_status' => wp_create_nonce('mailmunch_change_email_status'),
 			'delete_email' => wp_create_nonce('mailmunch_delete_email'),
+			'sign_in' => wp_create_nonce('mailmunch_sign_in'),
+			'sign_up' => wp_create_nonce('mailmunch_sign_up'),
 		));
 
 	}
 
 	public function sign_up() {
+		if ( ! isset( $_POST['nonce'] )
+			|| ! wp_verify_nonce( $_POST['nonce'], 'mailmunch_sign_up' )
+			|| ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'error' => 'Permission denied.' ), 403 );
+		}
+
 		$this->initiate_api();
-		$email = $_POST['email'];
-		$password = $_POST['password'];
-		echo json_encode($this->mailmunch_api->signUpUser($email, $password, $_POST['site_name'], $_POST['site_url']));
+
+		$email     = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		$password  = isset( $_POST['password'] ) ? (string) wp_unslash( $_POST['password'] ) : '';
+		$site_name = isset( $_POST['site_name'] ) ? sanitize_text_field( wp_unslash( $_POST['site_name'] ) ) : '';
+		$site_url  = isset( $_POST['site_url'] ) ? esc_url_raw( wp_unslash( $_POST['site_url'] ) ) : '';
+
+		echo wp_json_encode( $this->mailmunch_api->signUpUser( $email, $password, $site_name, $site_url ) );
 		exit;
 	}
 
 	public function sign_in() {
+		if ( ! isset( $_POST['nonce'] )
+			|| ! wp_verify_nonce( $_POST['nonce'], 'mailmunch_sign_in' )
+			|| ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'error' => 'Permission denied.' ), 403 );
+		}
+
 		$this->initiate_api();
-		$email = $_POST['email'];
-		$password = $_POST['password'];
-		echo json_encode($this->mailmunch_api->signInUser($email, $password));
+
+		$email    = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		$password = isset( $_POST['password'] ) ? (string) wp_unslash( $_POST['password'] ) : '';
+
+		echo wp_json_encode( $this->mailmunch_api->signInUser( $email, $password ) );
 		exit;
 	}
 
 	public function delete_widget() {
-		// Check if nonce is set and valid and if the current user has 'manage_options' capability (typically administrators).
-    if ( isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'mailmunch_delete_widget') && current_user_can('manage_options') ) {
-			$this->initiate_api();
-			echo json_encode($this->mailmunch_api->deleteWidget($_POST['widget_id']));
-    } else {
-			echo json_encode(array('error' => 'Permission denied.')); // Optionally, you can return an error message.
-    }
-    exit;
+		if ( ! isset( $_POST['nonce'] )
+			|| ! wp_verify_nonce( $_POST['nonce'], 'mailmunch_delete_widget' )
+			|| ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'error' => 'Permission denied.' ), 403 );
+		}
+
+		$this->initiate_api();
+		$widget_id = isset( $_POST['widget_id'] ) ? sanitize_text_field( wp_unslash( $_POST['widget_id'] ) ) : '';
+		echo wp_json_encode( $this->mailmunch_api->deleteWidget( $widget_id ) );
+		exit;
 	}
 
 	public function change_email_status() {
-		if ( isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'mailmunch_change_email_status') && current_user_can('manage_options') ) { // Check if the current user has 'manage_options' capability (typically administrators).
-			$this->initiate_api();
-			echo json_encode($this->mailmunch_api->changeEmailStatus($_POST['email_id'], $_POST['email_status']));
-		} else {
-			echo json_encode(array('error' => 'Permission denied.')); // Optionally, you can return an error message.
+		if ( ! isset( $_POST['nonce'] )
+			|| ! wp_verify_nonce( $_POST['nonce'], 'mailmunch_change_email_status' )
+			|| ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'error' => 'Permission denied.' ), 403 );
 		}
+
+		$this->initiate_api();
+		$email_id     = isset( $_POST['email_id'] ) ? absint( $_POST['email_id'] ) : 0;
+		$email_status = isset( $_POST['email_status'] ) ? sanitize_text_field( wp_unslash( $_POST['email_status'] ) ) : '';
+		echo wp_json_encode( $this->mailmunch_api->changeEmailStatus( $email_id, $email_status ) );
 		exit;
 	}
 
 	public function delete_email() {
-		if ( isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'mailmunch_delete_email') && current_user_can('manage_options') ) { // Check if the current user has 'manage_options' capability (typically administrators).
-			$this->initiate_api();
-			echo json_encode($this->mailmunch_api->deleteEmail($_POST['email_id']));
-		} else {
-			echo json_encode(array('error' => 'Permission denied.')); // Optionally, you can return an error message.
+		if ( ! isset( $_POST['nonce'] )
+			|| ! wp_verify_nonce( $_POST['nonce'], 'mailmunch_delete_email' )
+			|| ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'error' => 'Permission denied.' ), 403 );
 		}
+
+		$this->initiate_api();
+		$email_id = isset( $_POST['email_id'] ) ? absint( $_POST['email_id'] ) : 0;
+		echo wp_json_encode( $this->mailmunch_api->deleteEmail( $email_id ) );
 		exit;
 	}
 
@@ -239,7 +268,13 @@ class Mailchimp_Mailmunch_Admin {
 
 		if ($show_notice) {
 			$review_url = 'https://wordpress.org/support/plugin/'. MAILCHIMP_MAILMUNCH_PLUGIN_DIRECTORY. '/reviews/#new-post';
-			$dismiss_url = esc_url_raw( add_query_arg( MAILCHIMP_MAILMUNCH_PREFIX. '_dismiss_review_notice', '1', admin_url() ) );
+			$dismiss_url = esc_url_raw( add_query_arg(
+				array(
+					MAILCHIMP_MAILMUNCH_PREFIX . '_dismiss_review_notice' => '1',
+					'_wpnonce' => wp_create_nonce( 'mailmunch_dismiss_review_notice' ),
+				),
+				admin_url()
+			) );
 
 			$review_message = '<div class="mailmunch-review-logo"><img src="'.plugins_url( 'admin/img/mailchimp_logo.png', dirname(__FILE__) ) .'" /></div>';
 			$review_message .= sprintf( __( "You have been using <strong>%s</strong> for a few weeks now. We hope you are enjoying the features. Please consider leaving us a nice review. Reviews help people find our plugin and lets you provide us with useful feedback which helps us improve." , MAILCHIMP_MAILMUNCH_SLUG ), $this->plugin_name );
@@ -261,8 +296,11 @@ class Mailchimp_Mailmunch_Admin {
 	 * @since    2.1.4
 	 */
 	public function dismiss_review_notice() {
-		if ( isset( $_GET[MAILCHIMP_MAILMUNCH_PREFIX. '_dismiss_review_notice'] ) ) {
-			add_option( MAILCHIMP_MAILMUNCH_PREFIX. '_dismiss_review_notice', 'true' );
+		if ( isset( $_GET[MAILCHIMP_MAILMUNCH_PREFIX . '_dismiss_review_notice'] )
+			&& isset( $_GET['_wpnonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'mailmunch_dismiss_review_notice' )
+			&& current_user_can( 'install_plugins' ) ) {
+			add_option( MAILCHIMP_MAILMUNCH_PREFIX . '_dismiss_review_notice', 'true' );
 		}
 	}
 
@@ -316,14 +354,14 @@ class Mailchimp_Mailmunch_Admin {
 	public function settings_page() {
     $this->initiate_api();
 
-    // Add nonce check
-    if (isset($_POST['mailmunch_settings_nonce']) && wp_verify_nonce($_POST['mailmunch_settings_nonce'], 'mailmunch_settings_action')) {
-			// Nonce is valid; process the form data
-			if (isset($_POST['auto_embed'])) {
-				$this->mailmunch_api->setSetting('auto_embed', $_POST['auto_embed']);
+    if ( isset( $_POST['mailmunch_settings_nonce'] )
+			&& wp_verify_nonce( $_POST['mailmunch_settings_nonce'], 'mailmunch_settings_action' )
+			&& current_user_can( 'manage_options' ) ) {
+			if ( isset( $_POST['auto_embed'] ) ) {
+				$this->mailmunch_api->setSetting( 'auto_embed', sanitize_text_field( wp_unslash( $_POST['auto_embed'] ) ) );
 			}
-			if (isset($_POST['landing_pages_enabled'])) {
-				$this->mailmunch_api->setSetting('landing_pages_enabled', $_POST['landing_pages_enabled']);
+			if ( isset( $_POST['landing_pages_enabled'] ) ) {
+				$this->mailmunch_api->setSetting( 'landing_pages_enabled', sanitize_text_field( wp_unslash( $_POST['landing_pages_enabled'] ) ) );
 			}
     }
 
@@ -406,9 +444,9 @@ class Mailchimp_Mailmunch_Admin {
 			break;
 
 			case 'integrate':
-				if (isset($_POST['access_token'])) {
-					if (wp_verify_nonce($_POST['mailchimp_mailmunch_form_nonce'], 'mailchimp_mailmunch_form_action') && current_user_can('manage_options')) { 
-						update_option($this->mailmunch_api->getPrefix(). 'mailchimp_access_token', $_POST['access_token']);
+				if ( isset( $_POST['access_token'] ) ) {
+					if ( wp_verify_nonce( $_POST['mailchimp_mailmunch_form_nonce'], 'mailchimp_mailmunch_form_action' ) && current_user_can( 'manage_options' ) ) {
+						update_option( $this->mailmunch_api->getPrefix() . 'mailchimp_access_token', sanitize_text_field( wp_unslash( $_POST['access_token'] ) ) );
 					}
 				} else if (!get_option($this->mailmunch_api->getPrefix(). 'mailchimp_access_token') || !current_user_can('manage_options')) {
 					echo '<script>window.location.href="admin.php?page=mailchimp-mailmunch";</script>';
@@ -423,11 +461,15 @@ class Mailchimp_Mailmunch_Admin {
 			break;
 
 			default:
-				if (isset($_POST['list_id'])) {
-					update_option($this->mailmunch_api->getPrefix(). 'mailchimp_list_id', $_POST['list_id']);
-					$accessToken = get_option($this->mailmunch_api->getPrefix(). 'mailchimp_access_token');
+				if ( isset( $_POST['list_id'] )
+					&& isset( $_POST['mailmunch_choose_list_nonce'] )
+					&& wp_verify_nonce( $_POST['mailmunch_choose_list_nonce'], 'mailmunch_choose_list' )
+					&& current_user_can( 'manage_options' ) ) {
+					$list_id = sanitize_text_field( wp_unslash( $_POST['list_id'] ) );
+					update_option( $this->mailmunch_api->getPrefix() . 'mailchimp_list_id', $list_id );
+					$accessToken = get_option( $this->mailmunch_api->getPrefix() . 'mailchimp_access_token' );
 
-					$this->mailmunch_api->createIntegration($accessToken, $_POST['list_id']);
+					$this->mailmunch_api->createIntegration( $accessToken, $list_id );
 				}
 				$currentStep = 'forms';
 				require_once(plugin_dir_path( __FILE__ ) . 'partials/mailchimp-mailmunch-tabs.php');

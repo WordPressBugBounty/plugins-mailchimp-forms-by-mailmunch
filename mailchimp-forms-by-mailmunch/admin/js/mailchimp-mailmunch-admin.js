@@ -131,6 +131,7 @@
         site_name: $(this).find('input[name=site_name]').val(),
         site_url: $(this).find('input[name=site_url]').val(),
         action: 'sign_up',
+        nonce: mailmunch_nonces.sign_up,
       };
 
       $.ajax({
@@ -165,6 +166,7 @@
         email: $(this).find('input[name=email]').val(),
         password: $(this).find('input[name=password]').val(),
         action: 'sign_in',
+        nonce: mailmunch_nonces.sign_in,
       };
 
       $.ajax({
