@@ -16,7 +16,7 @@
  * Plugin Name:       Mailmunch Forms for Mailchimp
  * Plugin URI:        http://connect.mailchimp.com/integrations/mailmunch-email-list-builder
  * Description:       The easiest way to convert your site visitors into email subscribers. Add beautiful Mailchimp opt-in forms to your WordPress site.
- * Version:           3.3.0
+ * Version:           3.3.1
  * Author:            MailMunch
  * Author URI:        http://www.mailmunch.com
  * License:           GPL-2.0+
