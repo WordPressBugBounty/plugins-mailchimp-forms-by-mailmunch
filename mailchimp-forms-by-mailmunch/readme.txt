@@ -4,7 +4,7 @@ Donate link: https://www.mailmunch.com/pricing/?utm_source=wp-plugin-repo&utm_me
 Tags: Mailchimp, Mailchimp forms, Mailchimp lists, opt-in forms, sign up form, email, forms, mailing lists, marketing, newsletter, sign up
 Requires at least: 4.0
 Tested up to: 7.0
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,6 +170,10 @@ Use the [WordPress.org plugin forums](https://wordpress.org/support/plugin/mailc
 8. Another Mailchimp connected example
 
 == Changelog ==
+
+= 3.3.2 - Nov 22, 2026 =
+* Security: Landing Pages are for administrators only, and wp-admin pages no longer contain the MailMunch login token; links into MailMunch now use a one-use sign-in link
+* Security: a landing page can only be set to one of the connected MailMunch site's own pages
 
 = 3.3.0 - Oct 12, 2026 =
 * Fixed security vulnerabilities and known issues

@@ -23,7 +23,7 @@ define( 'MAILCHIMP_MAILMUNCH_SLUG', "mailchimp-mailmunch" );
 define( 'MAILCHIMP_MAILMUNCH_PREFIX', 'mc_mm' );
 define( 'MAILCHIMP_MAILMUNCH_POST_TYPE', 'mailmunch_page' );
 define( 'MAILCHIMP_MAILMUNCH_PLUGIN_DIRECTORY', 'mailchimp-forms-by-mailmunch' );
-define( 'MAILCHIMP_MAILMUNCH_VERSION', '3.3.1' );
+define( 'MAILCHIMP_MAILMUNCH_VERSION', '3.3.2' );
 
 /**
  * The core plugin class.
@@ -215,6 +215,8 @@ class Mailchimp_Mailmunch {
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'review_us_notice' );
 
 		// Ajax calls
+		$this->loader->add_action( 'admin_post_'. MAILCHIMP_MAILMUNCH_PREFIX. '_sso', $plugin_admin, 'sso_redirect' );
+		$this->loader->add_action( 'admin_post_'. MAILCHIMP_MAILMUNCH_PREFIX. '_connect', $plugin_admin, 'connect_redirect' );
 		$this->loader->add_action( 'wp_ajax_sign_up', $plugin_admin, 'sign_up' );
 		$this->loader->add_action( 'wp_ajax_sign_in', $plugin_admin, 'sign_in' );
 		$this->loader->add_action( 'wp_ajax_delete_widget', $plugin_admin, 'delete_widget' );
@@ -271,6 +273,7 @@ class Mailchimp_Mailmunch {
 		$this->loader->add_filter('views_edit-'. MAILCHIMP_MAILMUNCH_POST_TYPE, $plugin_post_type, 'post_type_desc');
 		$this->loader->add_action('add_meta_boxes', $plugin_post_type, 'post_meta_box', 10, 2);
 		$this->loader->add_action('save_post', $plugin_post_type, 'landing_page_save_meta', 10, 2 );
+		$this->loader->add_action('admin_notices', $plugin_post_type, 'landing_page_refused_notice');
 		
 		$plugin_rewrite = new Mailchimp_Mailmunch_Rewrite();
 		$this->loader->add_action('init', $plugin_rewrite, 'init');

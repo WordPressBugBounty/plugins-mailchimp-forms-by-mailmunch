@@ -28,7 +28,7 @@
             <td colspan="3" class="inside-container">
               <img id="loader" src="<?php echo plugins_url( 'img/loader.gif', dirname(__FILE__) ) ?>" />
 
-              <a id="connect-mailchimp" href="<?php echo MAILCHIMP_MAILMUNCH_HOME_URL ?>/wordpress/mailchimp/new?token=<?php echo $this->mailmunch_api->getUserToken(); ?>">
+              <a id="connect-mailchimp" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'action', MAILCHIMP_MAILMUNCH_PREFIX . '_connect', admin_url( 'admin-post.php' ) ), MAILCHIMP_MAILMUNCH_PREFIX . '_connect' ) ); ?>">
                 <img src="<?php echo plugins_url( 'img/mailchimp_logo.png', dirname(__FILE__) ) ?>" />
                 <span class="button button-primary">Connect to MailChimp</span>
               </a>
